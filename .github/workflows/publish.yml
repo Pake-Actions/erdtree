@@ -97,7 +97,11 @@ jobs:
         VERSION: ${{ github.ref_name }}
       shell: bash
       run: |
+        ls -l
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
         mv target/${{ matrix.target }}/release/et.exe et-$VERSION-${{ matrix.target }}.exe
+        echo "ls -l *.exe"
+        ls -l *.exe
+        echo "test"
         ls -l et-$VERSION-${{ matrix.target }}.exe
         bash upload.sh et-$VERSION-${{ matrix.target }}.exe
