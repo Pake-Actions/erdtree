@@ -99,10 +99,17 @@ jobs:
         mkdir output/
         mv target/${{ matrix.target }}/release/et.exe output/et-$env:VERSION-${{ matrix.target }}.exe
     
-    - name: Upload files (only for Windows)
-      uses: ncipollo/release-action@v1
-      if: matrix.target == 'x86_64-pc-windows-msvc'
-      with:
-        allowUpdates: true
-        artifacts: "output/*"
-        token: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Upload files (only for Windows)
+    #   uses: ncipollo/release-action@v1
+    #   if: matrix.target == 'x86_64-pc-windows-msvc'
+    #   with:
+    #     allowUpdates: true
+    #     artifacts: "output/*"
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload files
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        UPLOADTOOL_ISPRERELEASE: true
+      run: |
+        curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
+        bash upload.sh output/*
