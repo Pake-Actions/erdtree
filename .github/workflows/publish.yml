@@ -12,29 +12,29 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: ubuntu-20.04
-          #   target: x86_64-unknown-linux-gnu
-          #   use-cross: false
+          - os: ubuntu-20.04
+            target: x86_64-unknown-linux-gnu
+            use-cross: false
 
-          # - os: ubuntu-20.04
-          #   target: x86_64-unknown-linux-musl
-          #   use-cross: false
+          - os: ubuntu-20.04
+            target: x86_64-unknown-linux-musl
+            use-cross: false
           
-          # - os: ubuntu-20.04
-          #   target: aarch64-unknown-linux-gnu
-          #   use-cross: true
+          - os: ubuntu-20.04
+            target: aarch64-unknown-linux-gnu
+            use-cross: true
 
-          # - os: ubuntu-20.04
-          #   target: aarch64-unknown-linux-musl
-          #   use-cross: true
+          - os: ubuntu-20.04
+            target: aarch64-unknown-linux-musl
+            use-cross: true
 
-          # - os: macos-latest
-          #   target: x86_64-apple-darwin
-          #   use-cross: false
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            use-cross: false
 
-          # - os: macos-latest
-          #   target: aarch64-apple-darwin
-          #   use-cross: false
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            use-cross: false
           
           - os: windows-latest
             target: x86_64-pc-windows-msvc
@@ -45,10 +45,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 1
-
-    # - name: Set the version
-    #   id: version
-    #   run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
     - name: Install Rust
       uses: actions-rs/toolchain@v1
@@ -92,24 +88,15 @@ jobs:
     - name: Rename files (only for Windows)
       if: matrix.target == 'x86_64-pc-windows-msvc'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        UPLOADTOOL_ISPRERELEASE: true
         VERSION: ${{ github.ref_name }}
       run: |
         mkdir output/
         mv target/${{ matrix.target }}/release/et.exe output/et-$env:VERSION-${{ matrix.target }}.exe
     
-    # - name: Upload files (only for Windows)
-    #   uses: ncipollo/release-action@v1
-    #   if: matrix.target == 'x86_64-pc-windows-msvc'
-    #   with:
-    #     allowUpdates: true
-    #     artifacts: "output/*"
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Upload files
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        UPLOADTOOL_ISPRERELEASE: true
-      run: |
-        curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
-        bash upload.sh output/*
+    - name: Upload files (only for Windows)
+      uses: ncipollo/release-action@v1
+      if: matrix.target == 'x86_64-pc-windows-msvc'
+      with:
+        allowUpdates: true
+        artifacts: "output/*"
+        token: ${{ secrets.GITHUB_TOKEN }}
