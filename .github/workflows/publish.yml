@@ -95,13 +95,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOADTOOL_ISPRERELEASE: true
         VERSION: ${{ github.ref_name }}
-      shell: bash
       run: |
-        ls -l
-        curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
-        mv target/${{ matrix.target }}/release/et.exe et-$VERSION-${{ matrix.target }}.exe
-        echo "ls -l *.exe"
-        ls -l *.exe
-        echo "test"
-        ls -l et-$VERSION-${{ matrix.target }}.exe
-        bash upload.sh *.exe
+        mv target/${{ matrix.target }}/release/et.exe et-$env:VERSION-${{ matrix.target }}.exe
+    
+    - uses: ncipollo/release-action@v1
+      if: matrix.target == 'x86_64-pc-windows-msvc'
+      with:
+        allowUpdates: true
+        artifacts: *.exe
+        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
