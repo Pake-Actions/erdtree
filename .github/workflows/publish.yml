@@ -82,7 +82,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOADTOOL_ISPRERELEASE: true
-        VERSION: ${GITHUB_REF#refs/tags/}
+        VERSION: ${{  github.ref_name }}
       run: |
         echo ${VERSION}
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
@@ -95,8 +95,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOADTOOL_ISPRERELEASE: true
-        VERSION: ${GITHUB_REF#refs/tags/}
+        VERSION: ${{ github.ref_name }}
       run: |
+        echo ${VERSION}
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
         mv target/${{ matrix.target }}/release/et.exe et-${VERSION}-${{ matrix.target }}.exe
         bash upload.sh et-${VERSION}-${{ matrix.target }}.exe
