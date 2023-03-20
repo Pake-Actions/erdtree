@@ -89,18 +89,20 @@ jobs:
         tar -cavf et-${VERSION}-${{ matrix.target }}.tar.gz et CHANGELOG.md README.md LICENSE
         bash upload.sh et-${VERSION}-${{ matrix.target }}.tar.gz
     
-    - name: Upload files (only for Windows)
+    - name: Rename files (only for Windows)
       if: matrix.target == 'x86_64-pc-windows-msvc'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOADTOOL_ISPRERELEASE: true
         VERSION: ${{ github.ref_name }}
       run: |
-        mv target/${{ matrix.target }}/release/et.exe et-$env:VERSION-${{ matrix.target }}.exe
+        mkdir output/
+        mv target/${{ matrix.target }}/release/et.exe output/et-$env:VERSION-${{ matrix.target }}.exe
     
-    - uses: ncipollo/release-action@v1
+    - name: Upload files (only for Windows)
+      uses: ncipollo/release-action@v1
       if: matrix.target == 'x86_64-pc-windows-msvc'
       with:
         allowUpdates: true
-        artifacts: "*.exe"
+        artifacts: "output/*"
         token: ${{ secrets.GITHUB_TOKEN }}
