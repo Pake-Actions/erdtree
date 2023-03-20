@@ -82,18 +82,21 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOADTOOL_ISPRERELEASE: true
+        VERSION: ${GITHUB_REF#refs/tags/}
       run: |
+        echo ${VERSION}
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
         mv target/${{ matrix.target }}/release/et et
-        tar -cavf et-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}.tar.gz et CHANGELOG.md README.md LICENSE
-        bash upload.sh et-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}.tar.gz
+        tar -cavf et-${VERSION}-${{ matrix.target }}.tar.gz et CHANGELOG.md README.md LICENSE
+        bash upload.sh et-${VERSION}-${{ matrix.target }}.tar.gz
     
     - name: Upload files (only for Windows)
       if: matrix.target == 'x86_64-pc-windows-msvc'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOADTOOL_ISPRERELEASE: true
+        VERSION: ${GITHUB_REF#refs/tags/}
       run: |
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
-        mv target/${{ matrix.target }}/release/et.exe et-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}.exe
-        bash upload.sh et-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}.exe
+        mv target/${{ matrix.target }}/release/et.exe et-${VERSION}-${{ matrix.target }}.exe
+        bash upload.sh et-${VERSION}-${{ matrix.target }}.exe
