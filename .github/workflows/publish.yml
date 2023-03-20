@@ -84,7 +84,6 @@ jobs:
         UPLOADTOOL_ISPRERELEASE: true
         VERSION: ${{  github.ref_name }}
       run: |
-        echo ${VERSION}
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
         mv target/${{ matrix.target }}/release/et et
         tar -cavf et-${VERSION}-${{ matrix.target }}.tar.gz et CHANGELOG.md README.md LICENSE
@@ -97,7 +96,7 @@ jobs:
         UPLOADTOOL_ISPRERELEASE: true
         VERSION: ${{ github.ref_name }}
       run: |
-        echo ${VERSION}
+        echo $env:VERSION
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
-        mv target/${{ matrix.target }}/release/et.exe et-${VERSION}-${{ matrix.target }}.exe
-        bash upload.sh et-${VERSION}-${{ matrix.target }}.exe
+        mv target/${{ matrix.target }}/release/et.exe et-$env:VERSION-${{ matrix.target }}.exe
+        bash upload.sh et-$env:VERSION-${{ matrix.target }}.exe
