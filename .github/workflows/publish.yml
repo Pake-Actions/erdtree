@@ -99,4 +99,5 @@ jobs:
       run: |
         curl -L https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
         mv target/${{ matrix.target }}/release/et.exe et-$VERSION-${{ matrix.target }}.exe
+        ls -l et-$VERSION-${{ matrix.target }}.exe
         bash upload.sh et-$VERSION-${{ matrix.target }}.exe
