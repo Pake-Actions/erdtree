@@ -104,4 +104,3 @@ jobs:
         allowUpdates: true
         artifacts: *.exe
         token: ${{ secrets.GITHUB_TOKEN }}
-        token: ${{ secrets.GITHUB_TOKEN }}
