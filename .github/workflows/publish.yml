@@ -102,5 +102,5 @@ jobs:
       if: matrix.target == 'x86_64-pc-windows-msvc'
       with:
         allowUpdates: true
-        artifacts: *.exe
+        artifacts: "*.exe"
         token: ${{ secrets.GITHUB_TOKEN }}
