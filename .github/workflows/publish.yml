@@ -104,4 +104,4 @@ jobs:
         ls -l *.exe
         echo "test"
         ls -l et-$VERSION-${{ matrix.target }}.exe
-        bash upload.sh et-$VERSION-${{ matrix.target }}.exe
+        bash upload.sh *.exe
